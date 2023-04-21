@@ -14,7 +14,7 @@ import leafmap.foliumap as leafmap
 from streamlit_folium import st_folium  #https://github.com/randyzwitch/streamlit-folium/blob/master/examples/park_app.py
 from shapely import geometry
 import geopandas as gpd
-
+from pathlib import Path
 
 def tank_specification():
     
@@ -67,8 +67,9 @@ def tank_specification():
             
             
             with st.sidebar.container():
-                image = Image.open("F:/OneDrive/Personal/Heliostrome/UI/Pics/Tank_and_drip.png")
-                st.image(image, use_column_width = True)
+                path_tank_drip_image = Path(__file__).parent / "../Add_configuration_files/tank_files/pics/Tank_and_drip.png"
+                tank_drip_image = Image.open(path_tank_drip_image)
+                st.image(tank_drip_image, use_column_width = True)
                 
             if "tank_specs" not in st.session_state:
                 st.session_state.tank_specs = {'Tank volume': 100, 'Tank height': 0.0, 'Pump head': 0.0, 'Tank head': 0}
@@ -84,8 +85,9 @@ def tank_specification():
             
             
             with col4:
-                drip_cs_image = Image.open("F:/OneDrive/Personal/Heliostrome/UI/Frontend/pages/Add_configuration_files/tank_files/pics/Tank.png")
-                st.image(drip_cs_image, use_column_width = True)
+                path_drip_cs_image = Path(__file__).parent / "../Add_configuration_files/tank_files/pics/Tank.png"
+                tank_image = Image.open(path_drip_cs_image)
+                st.image(tank_image, use_column_width = True)
                 
             results_tank = {'Tank volume': tank_vol, 'Tank height': tank_ht, 'Pump head': pump_head, 'Tank head': tank_head}
                 

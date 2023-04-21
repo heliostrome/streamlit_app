@@ -10,10 +10,12 @@ import pandas as pd
 import os
 import io
 from urllib.request import urlopen
+from pathlib import Path
 
 def get_path():
-    
-    path = "F:/OneDrive/Personal/Heliostrome/UI/Frontend/pages/Add_configuration_files/solar_module_files/CEC Modules.csv"
+    path = Path(__file__).parent / "../Add_configuration_files/solar_module_files/CEC Modules.csv"
+        
+    #path = "F:/OneDrive/Personal/Heliostrome/UI/Frontend/pages/Add_configuration_files/solar_module_files/CEC Modules.csv"
         
     #path = 'https://www.energy.ca.gov/sites/default/files/2021-10/PV_Module_List_Full_Data_ADA.xlsx'
     

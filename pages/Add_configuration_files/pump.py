@@ -13,6 +13,7 @@ import geopandas as gpd
 from streamlit_folium import st_folium  #https://github.com/randyzwitch/streamlit-folium/blob/master/examples/park_app.py
 from shapely import geometry
 import numpy as np
+from pathlib import Path
 
 #import folium
 from streamlit_folium import st_folium 
@@ -52,7 +53,8 @@ def select_pump():
     dia_pipeline = col2.number_input(label = 'Pipe line diameter (mm)', min_value = 0, step = 1)
     
     with col3:
-        pump_suction_image = Image.open("F:/OneDrive/Personal/Heliostrome/UI/Frontend/pages/Add_configuration_files/pump_files/pics/Pump_suction_head.png")
+        path_pump_suction_image = Path(__file__).parent / "../Add_configuration_files/pump_files/pics/Pump_suction_head.png"
+        pump_suction_image = Image.open(path_pump_suction_image)
         st.image(pump_suction_image, caption = 'Pump suction', use_column_width = True)
         
         conf_pspecs = st.button('Confirm specifications')
