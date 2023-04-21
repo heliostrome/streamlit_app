@@ -11,18 +11,13 @@ from PIL import Image
 
 import sys 
 import os
+from pathlib import Path
 
-#import pandas as pd
-#import leafmap.foliumap as leafmap
-#from PIL import Image
-
-
-#from pyproj import Geod
-#from shapely.geometry import Polygon
-
+#cwd = os.getcwd()
 st.set_page_config(layout="wide", page_title="Input field data")
 with st.sidebar.container():
-    image = Image.open("F:\\OneDrive\\Personal\\Heliostrome\\UI\\Frontend\\Logo for frontend\\HelioStrome-logo_DarkGreen_Web_resized.png")
+    path_logo = Path(__file__).parent / "../Logo for frontend/HelioStrome-logo_DarkGreen_Web_resized.png"
+    image = Image.open(path_logo)
     st.image(image, use_column_width = True)
     
 # horizontal menu
@@ -41,18 +36,19 @@ selected = option_menu(
 
 if selected == "Field location":
     #from Input_field_data_files import field_location
-    sys.path.append(os.path.abspath("F:\\OneDrive\\Personal\\Heliostrome\\UI\\Frontend\\pages\\Input_field_data_files"))
+    
+    sys.path.append(os.path.relpath("../Frontend/pages/Input_field_data_files"))
     from field_location import *
     get_field_location()
     
 if selected == "Soil":
-    sys.path.append(os.path.abspath("F:\\OneDrive\\Personal\\Heliostrome\\UI\\Frontend\\pages\\Input_field_data_files"))
+    sys.path.append(os.path.relpath("../Frontend/pages/Input_field_data_files"))
     from soil import *
     select_soil_mass_fracs()
     
 if selected == "Crop":
     #from Input_field_data_files import field_location
-    sys.path.append(os.path.abspath("F:\\OneDrive\\Personal\\Heliostrome\\UI\\Frontend\\pages\\Input_field_data_files"))
+    sys.path.append(os.path.abspath("../Frontend/pages/Input_field_data_files"))
     from crop import *
     select_crop()
     select_sowing_date()

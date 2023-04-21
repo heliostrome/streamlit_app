@@ -14,7 +14,7 @@ from st_keyup import st_keyup
 
 from st_aggrid import JsCode, AgGrid, GridOptionsBuilder #https://blog.streamlit.io/building-a-pivottable-report-with-streamlit-and-ag-grid/
 from st_aggrid.shared import GridUpdateMode
-
+from pathlib import Path
 #def format_func(option):
 #    modules = get_module_params()
 #    return modules[option]
@@ -76,7 +76,8 @@ def pv_stringing():
         n_parallel = col2.number_input(label = 'Modules in parallel', min_value = 0, step = 1)
         
     with col3:
-        stringing_image = Image.open("F:/OneDrive/Personal/Heliostrome/UI/Frontend/pages/Add_configuration_files/solar_module_files/pics/PV_array_series_parallel.png")
+        path_stringing_image = Path(__file__).parent / "../Add_configuration_files/solar_module_files/pics/PV_array_series_parallel.png"
+        stringing_image = Image.open(path_stringing_image)
         st.image(stringing_image, use_column_width = True)
         
     results_pv_stringing = {"Modules in series": n_series, "Modules in parallel": n_parallel}
