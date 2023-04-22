@@ -13,7 +13,7 @@ import sys
 import os
 from pathlib import Path
 
-st.set_page_config(layout="wide", page_title="Add configuration")
+st.set_page_config(layout="wide", page_title="Add Solar Pumping System")
 with st.sidebar.container():
     path_logo = Path(__file__).parent / "../Logo for frontend/HelioStrome-logo_DarkGreen_Web_resized.png"
     image = Image.open(path_logo)
@@ -34,27 +34,27 @@ selected = option_menu(
     })
 
 if selected == "Irrigation method":
-    sys.path.append(os.path.abspath("../Frontend/pages/Add_configuration_files"))
-    from irrigation_method import *
+    
+    from pages.Add_solar_pumping_system_files.irrigation_method import *
     select_irrigation_method()
     
 if selected == "Tank":
-    sys.path.append(os.path.relpath("../Frontend/pages/Add_configuration_files"))
-    from tank import *
+    
+    from pages.Add_solar_pumping_system_files.tank import *
     tank_specification()
     #select_tank_loc()
     
 if selected == "Pump":
-    sys.path.append(os.path.relpath("../Frontend/pages/Add_configuration_files"))
-    from pump import *
+    
+    from pages.Add_solar_pumping_system_files.pump import *
     select_pump()
     
 if selected == "Solar modules":
-    sys.path.append(os.path.relpath("../Frontend/pages/Add_configuration_files"))
-    from solar_modules import *
+    
+    from pages.Add_solar_pumping_system_files.solar_modules import *
     select_module()
     pv_stringing()
     
 if selected == "Financials":
-    sys.path.append(os.path.abspath("../Frontend/pages/Add_configuration_files"))
-    from financials import *
+    
+    from pages.Add_solar_pumping_system_files.financials import *
