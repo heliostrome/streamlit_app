@@ -12,9 +12,9 @@ from pathlib import Path
 
 
 
-path_logo = Path(__file__).parent / "../Frontend/Logo for frontend/HelioStrome-logo_DarkGreen_Web_resized.png"
+path_logo = Path(__file__).parent / "../Logo for frontend/HelioStrome-logo_DarkGreen_Web_resized.png"
 
-path_image = Path(__file__).parent / "../Frontend/Logo for frontend/Heliostrome_catchphrase.png"
+path_image = Path(__file__).parent / "../Logo for frontend/Heliostrome_catchphrase.png"
 
 st.set_page_config(layout="wide", page_title="Home")
 
