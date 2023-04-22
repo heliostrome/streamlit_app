@@ -35,20 +35,15 @@ selected = option_menu(
     })
 
 if selected == "Field location":
-    #from Input_field_data_files import field_location
-    
-    sys.path.append(os.path.relpath("../Frontend/pages/Input_field_data_files"))
-    from field_location import *
+    from pages.Input_field_data_files.field_location import *
     get_field_location()
     
 if selected == "Soil":
-    sys.path.append(os.path.relpath("../Frontend/pages/Input_field_data_files"))
-    from soil import *
+    from pages.Input_field_data_files.soil import *
     select_soil_mass_fracs()
     
 if selected == "Crop":
     #from Input_field_data_files import field_location
-    sys.path.append(os.path.abspath("../Frontend/pages/Input_field_data_files"))
-    from crop import *
+    from pages.Input_field_data_files.crop import *
     select_crop()
     select_sowing_date()
