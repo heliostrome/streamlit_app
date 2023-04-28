@@ -54,6 +54,7 @@ if selected == "Solar modules":
     from pages.Add_solar_pumping_system_files.solar_modules import *
     select_module()
     pv_stringing()
+    pv_geometry()
     
 if selected == "Financials":
     

@@ -10,10 +10,10 @@ import streamlit as st
 import pandas as pd
 from PIL import Image
 import numpy as np
-from pages.Input_field_data_files.crop_dataset import *
 import datetime
 from st_aggrid import JsCode, AgGrid, GridOptionsBuilder #https://blog.streamlit.io/building-a-pivottable-report-with-streamlit-and-ag-grid/
 from st_aggrid.shared import GridUpdateMode
+from .crop_files.crop_dataset import *
 
 def select_crop():
     if "crop_type" not in st.session_state:
