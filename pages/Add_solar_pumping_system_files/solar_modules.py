@@ -32,7 +32,7 @@ def select_module():
         try:
             draw_local_irradiance()
         except Exception as e:
-            st.write(e)
+            #st.write(e)
             st.write("The field location has not yet been selected")
             
     st.header("Solar module type")
