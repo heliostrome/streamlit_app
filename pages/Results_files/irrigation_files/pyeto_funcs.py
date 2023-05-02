@@ -4,7 +4,8 @@ Created on Wed Apr 26 14:19:26 2023
 
 @author: rghot
 """
-
+import math
+import datetime
 
 def svp_from_t(t):
     """
@@ -105,6 +106,6 @@ def celsius2kelvin(celsius):
 
 def date_formatter(date_text):
     try:
-        return dt.fromisoformat(date_text)
+        return datetime.date.fromisoformat(date_text)
     except ValueError:
         raise ValueError("Incorrect data format, should be YYYY-MM-DD")

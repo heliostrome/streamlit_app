@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Apr 12 11:33:50 2023
+Created on Tue May  2 17:37:34 2023
 
+@author: rghot
+"""
+
+
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Apr 12 11:33:50 2023
 @author: rghot
 """
 
@@ -47,8 +54,7 @@ def get_field_location():
         except Exception as e:
             #st.write(e)
             pass
-        
-        st_data = m.to_streamlit(add_layer_control=True, bidirectional=True)
+        st_data = m.to_streamlit(bidirectional=True)
             
         
         
@@ -134,4 +140,4 @@ def get_field_location():
                         
             except Exception as e:
                 #st.write (e)
-                st.write("Use the polygon tool to mark the boundaries of the field.")     
+                st.write("Use the polygon tool to mark the boundaries of the field.")  

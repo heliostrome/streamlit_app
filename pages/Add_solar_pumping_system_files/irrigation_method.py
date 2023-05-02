@@ -13,17 +13,41 @@ import numpy as np
 import leafmap.foliumap as leafmap
 import geopandas as gpd
 from pathlib import Path
+#from .irrigation_method_files.view_precipitation import *
+from .irrigation_method_files.retrieve_precipitation import *
 
 def select_irrigation_method():
+    
+    st.header("Rainfall at site")
+    
+    col1, col2 = st.columns([4,5])
+    
+    with col2:
+        try:
+            rain = draw_precipitation()
+            
+        except Exception as e:
+            #st.write(e)
+            st.write("First select the field location.")
+            
+    with col1:
+        try:
+            st.write(f'Annual rainfall:   {rain.sum():.2f} mm')
+        except Exception as e:
+            #st.write(e)
+            pass
+            
+    
+        
     
     col1, col2 = st.columns([4,5])
     
     with col1:            
         st.header("Irrigation method")
         option = st.selectbox(
-            label = '',
+            label = 'Irrigation method',
             options = ('Drip irrigation', 'Sprinkler irrigation', 'Furrow irrigation'),
-            label_visibility = "visible" )
+            label_visibility = "hidden" )
     with col2:
         try:
             c_x,c_y = st.session_state.field_loc['centroid'][0], st.session_state.field_loc['centroid'][1]
@@ -54,8 +78,8 @@ def select_irrigation_method():
             drip_basic_image = Image.open(path_drip_basic_image)
             st.image(drip_basic_image, use_column_width = True)
             
-        if "wm" not in st.session_state:
-            st.session_state.wm = np.nan
+        if "irrigation_specs" not in st.session_state:
+            st.session_state["irrigation_specs"] = np.nan
         
         col0, col1, col2, col3, col4 = st.columns([1,1,1,1,4])
         
@@ -81,15 +105,15 @@ def select_irrigation_method():
         d_dia_inner= col0.number_input(label = 'Dripperline inner diameter (mm)', min_value = 0, step = 1)
         d_wall_thickness = col1.number_input(label = 'Dripperline wall thickness (mm)', min_value = 0, step = 1)
         
-        results_wm = {'Watering method':'Drip irrigation', 'Dripperline length': l_dripline, 'Dripperline spacing': d_spacing, 
+        results_im = {'Irrigation method':'Drip irrigation', 'Dripperline length': l_dripline, 'Dripperline spacing': d_spacing, 
                                     'Number of dripperlines': n_dlines, 'Emitter spacing': e_spacing, 'Dripperline inner diameter': d_dia_inner, 'Dripperline wall thickness': d_wall_thickness}
         
         
         run = st.button('Submit')
                 
         if run:
-            st.session_state.wm = results_wm
-            st.write (st.session_state.wm)
+            st.session_state["irrigation_specs"] = results_im
+            st.write (st.session_state["irrigation_specs"])
             
             
             

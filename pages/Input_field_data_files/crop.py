@@ -17,7 +17,7 @@ from .crop_files.crop_dataset import *
 
 def select_crop():
     if "crop_type" not in st.session_state:
-                st.session_state.crop_type = np.nan
+                st.session_state["crop_type"] = np.nan
     
     st.header("Select the crop to be grown.")
     
@@ -41,14 +41,14 @@ def select_crop():
     st.markdown("""---""")
     
     if run_crop:
-        st.session_state.crop_type = results_crop
+        st.session_state["crop_type"] = results_crop
         #st.write(results_crop)
  
     
     
 def select_sowing_date():
     if "sowing_date" not in st.session_state:
-                st.session_state.sowing_date = {
+                st.session_state["sowing_date"] = {
                     'sowing_date': np.nan}
     st.header("**Select the date when the crop will be sown**")
     d = st.date_input(
@@ -62,7 +62,7 @@ def select_sowing_date():
     
           
     if run_sowing_date:
-        st.session_state.sowing_date = results_sowing_date
+        st.session_state["sowing_date"] = results_sowing_date
         #st.write(results_sowing_date)
         st.write("**Proceed to add a Solar Pumping System (SPS)**")
         
