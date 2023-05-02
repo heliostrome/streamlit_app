@@ -7,6 +7,8 @@ Created on Fri Apr 28 11:21:32 2023
 
 
 import streamlit as st
+from st_aggrid import JsCode, AgGrid, GridOptionsBuilder #https://blog.streamlit.io/building-a-pivottable-report-with-streamlit-and-ag-grid/
+from st_aggrid.shared import GridUpdateMode
 import datetime 
 from pvlib.iotools import get_pvgis_tmy
 from pandas import DataFrame, date_range
@@ -19,6 +21,8 @@ from pvlib.atmosphere import get_relative_airmass, get_absolute_airmass
 from pvlib.irradiance import get_extra_radiation, haydavies, get_ground_diffuse, aoi, get_total_irradiance, poa_components
 from pvlib.pvsystem import retrieve_sam, calcparams_cec, singlediode, i_from_v 
 from pvlib.temperature import faiman
+
+from .solar_module_dataset import *
 
 def get_start_end_dates():
     
@@ -120,6 +124,7 @@ def get_pv_outputs():
     latitude, longitude = get_lat_long()
     #st.write(latitude, longitude)
     
+    
     azimuth,tilt = get_pv_geometry()
     #st.write(azimuth, tilt)
     
@@ -138,6 +143,7 @@ def get_pv_outputs():
     df, months, inputs, defs = get_pvgis_tmy(latitude, longitude, outputformat='csv', usehorizon=True, userhorizon=None, 
                                          startyear=2007, endyear=2016, url='https://re.jrc.ec.europa.eu/api/', 
                                          timeout=60, map_variables = True)
+    
     
     #resets the index to a specific year
     df.index = date_range(start=start_date_str, end=end_date_str, freq = 'H')
@@ -230,7 +236,35 @@ def draw_local_irradiance():
     ax = df["ghi"].plot(color = "gold")
     ax.set_ylabel("Global Horizontal Irradiance\n(W)")
     fig.autofmt_xdate()
-    st.pyplot(fig = fig)
+    st.pyplot(fig = fig, clear_figure = True)
+    
+    
+def select_solar_module():
+    modules = get_all_module_params()
+    #st.write(modules)
+    gd = GridOptionsBuilder.from_dataframe(modules)
+    gd.configure_selection(selection_mode = "single", use_checkbox = True)
+    
+    gd.configure_default_column(resizable=True, filterable=True, sortable=True, editable=False,) # makes columns resizable, sortable and filterable by default
+    gridOptions = gd.build()
+    
+    dta = AgGrid(modules, gridOptions=gridOptions, height=250, allow_unsafe_jscode=True, update_mode=GridUpdateMode.SELECTION_CHANGED & GridUpdateMode.MODEL_CHANGED)
+    
+    
+    #st.write(dta['selected_rows'])
+    
+    try:
+        module_type = dta['selected_rows'][0]["Name"]
+        #st.write(module_type)
+        results_module_type = {"Solar module type": get_module_params(module_type)}
+        #st.write(results_module_type)
+        return results_module_type
+    except Exception as e:
+        #st.write (e)
+        pass
+        
+    
+    
     
     
     

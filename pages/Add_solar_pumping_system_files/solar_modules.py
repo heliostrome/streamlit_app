@@ -8,13 +8,13 @@ Created on Fri Apr 14 13:44:14 2023
 import streamlit as st
 from PIL import Image  
 import pandas as pd
-from .solar_module_files.solar_module_dataset import *
+#from .solar_module_files.solar_module_dataset import *
 from .solar_module_files.solar_funcs import *
 import numpy as np
 from st_keyup import st_keyup
 
-from st_aggrid import JsCode, AgGrid, GridOptionsBuilder #https://blog.streamlit.io/building-a-pivottable-report-with-streamlit-and-ag-grid/
-from st_aggrid.shared import GridUpdateMode
+#from st_aggrid import JsCode, AgGrid, GridOptionsBuilder #https://blog.streamlit.io/building-a-pivottable-report-with-streamlit-and-ag-grid/
+#from st_aggrid.shared import GridUpdateMode
 from pathlib import Path
 #def format_func(option):
 #    modules = get_module_params()
@@ -31,6 +31,7 @@ def select_module():
     with col2:
         try:
             draw_local_irradiance()
+            
         except Exception as e:
             #st.write(e)
             st.write("The field location has not yet been selected")
@@ -39,35 +40,18 @@ def select_module():
     
     
     if "pv_arr_specs" not in st.session_state:
-        st.session_state.sol_arr_specs = {"Solar module type": np.nan}
+        st.session_state["sol_arr_specs"] = {"Solar module type": np.nan}
     
-    modules = get_all_module_params()
-    #st.write(modules)
-    gd = GridOptionsBuilder.from_dataframe(modules)
-    gd.configure_selection(selection_mode = "single", use_checkbox = True)
-    
-    gd.configure_default_column(resizable=True, filterable=True, sortable=True, editable=False,) # makes columns resizable, sortable and filterable by default
-    gridOptions = gd.build()
-    
-    dta = AgGrid(modules, gridOptions=gridOptions, height=250, allow_unsafe_jscode=True, update_mode=GridUpdateMode.SELECTION_CHANGED & GridUpdateMode.MODEL_CHANGED)
+           
+        pv_module_type = select_solar_module()
     
     
-    #st.write(dta['selected_rows'])
-    try:
-        module_type = dta['selected_rows'][0]["Name"]
-        #st.write(module_type)
-        results_module_type = {"Solar module type": get_module_params(module_type)}
+    
+    
+    run_module_type = st.button('Confirm module selection')
+    if run_module_type:
+        st.session_state.pv_arr_specs = pv_module_type
         #st.write(results_module_type)
-        
-        run_module_type = st.button('Confirm module selection')
-        
-        if run_module_type:
-            st.session_state.pv_arr_specs = results_module_type
-            #st.write(results_module_type)
-    except Exception as e:
-        #st.write (e)
-        pass       
-    
     
     
     
@@ -77,7 +61,7 @@ def select_module():
            
 def pv_stringing():
     if "pv_stringing" not in st.session_state:
-        st.session_state.pv_stringing = {"Modules in series": np.nan, "Modules in parallel": np.nan}
+        st.session_state["pv_stringing"] = {"Modules in series": np.nan, "Modules in parallel": np.nan}
     
     st.header("Stringing configuration")
     
@@ -99,12 +83,12 @@ def pv_stringing():
     run_pv_stringing = st.button('Confirm PV stringing')
         
     if run_pv_stringing:
-        st.session_state.pv_stringing = results_pv_stringing
+        st.session_state["pv_stringing"] = results_pv_stringing
         #st.write(results_module_type)
         
 def pv_geometry():
     if "pv_geometry" not in st.session_state:
-                st.session_state.pv_geometry = {"array azimuth": np.nan, "array tilt": np.nan}
+                st.session_state["pv_geometry"] = {"array azimuth": np.nan, "array tilt": np.nan}
     
     st.header("Array geometry")
     
@@ -131,7 +115,7 @@ def pv_geometry():
     run_pv_geometry = st.button('Confirm PV geometry')
         
     if run_pv_geometry:
-        st.session_state.pv_geometry = results_pv_geometry
+        st.session_state["pv_geometry"] = results_pv_geometry
         #st.write(results_module_type)
         
         

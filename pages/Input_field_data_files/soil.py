@@ -11,11 +11,12 @@ import pandas as pd
 
 
 def default_slider_key():
-    if st.session_state.soil_fracs != (333, 763):  #intital value
-        st.session_state.soil_fracs = (333,763)
+    if st.session_state["soil_fracs"] != (333, 763):  #intital value
+        st.session_state["soil_fracs"] = (333,763)
         
 
-
+def default_soil_value():
+    return (333, 763)
 
 def select_soil_mass_fracs():
     
@@ -23,12 +24,12 @@ def select_soil_mass_fracs():
     st.write("**Adjust the sliders to input data from a soil test.**")
     
     if "soil_fracs" not in st.session_state:
-        st.session_state.soil_fracs = (333, 763) #initialise with default
+        st.session_state["soil_fracs"] = default_soil_value() #initialise with default
     
     
     values = st.slider(
         'Soil fraction',
-        0, 1000, st.session_state.soil_fracs, label_visibility = "hidden", key = "soil_fracs")
+        0, 1000, st.session_state["soil_fracs"], label_visibility = "hidden", key = "soil_fracs")
     
     
     col1, col2, col3, col4, col5 = st.columns(5, gap = "small")
@@ -54,6 +55,6 @@ def select_soil_mass_fracs():
     
     st.write("$*$ The soil mass fractions provided by default are obtained via satellite imagery.")
     #st.write('Values:', values)
-    #st.write(st.session_state.soil_fracs)
+    #st.write(st.session_state["soil_fracs"])
     
     
