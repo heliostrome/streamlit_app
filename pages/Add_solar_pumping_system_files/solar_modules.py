@@ -26,15 +26,21 @@ def select_module():
     
     st.header("Solar resource at site")
     
-    col1, col2, col3 = st.columns([1,5,1])
+    col1, col2 = st.columns([4,5])
     
     with col2:
         try:
-            draw_local_irradiance()
+            ghi = draw_local_irradiance()
             
         except Exception as e:
             #st.write(e)
             st.write("The field location has not yet been selected")
+    with col1:
+        try:
+            st.write(f'Annual Insolation:   {ghi.sum()/1000:.2f} $kWh/m^{2}$')
+        except Exception as e:
+            #st.write(e)
+            pass
             
     st.header("Solar module type")
     
