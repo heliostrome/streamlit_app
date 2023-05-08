@@ -11,3 +11,5 @@ streamlit_keyup==0.2.0
 streamlit_option_menu==0.3.2
 streamlit_aggrid==0.3.4.post3
 pvlib==0.9.5
+soilgrids==0.1.4
+stqdm==0.0.5
