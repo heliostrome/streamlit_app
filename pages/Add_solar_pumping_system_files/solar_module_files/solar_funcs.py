@@ -232,11 +232,17 @@ def draw_local_irradiance():
     #resets the index to a specific year
     df.index = date_range(start=start_date_str, end=end_date_str, freq = 'H')
     
+    #groups by month
+    dfm = df["ghi"].groupby(lambda x: x.month).sum()/1000  #Wh to kWh
+    
     fig,ax = plt.subplots()
-    ax = df["ghi"].plot(color = "gold")
-    ax.set_ylabel("Global Horizontal Irradiance\n(W)")
-    fig.autofmt_xdate()
+    #ax = df["ghi"].plot(color = "gold")
+    dfm.plot.bar(ax = ax, color = "gold")
+    ax.set_ylabel("Global Horizontal Insolation\n($kWh/m^{2}$)")
+    #fig.autofmt_xdate()
     st.pyplot(fig = fig, clear_figure = True)
+    
+    return df['ghi']
     
     
 def select_solar_module():
