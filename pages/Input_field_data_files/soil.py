@@ -7,6 +7,8 @@ Created on Fri Apr 21 10:59:35 2023
 
 import streamlit as st
 import pandas as pd
+from pathlib import Path
+from PIL import Image
 from .soil_files.soil_funcs import *
 
 
@@ -27,34 +29,44 @@ def select_soil_mass_fracs():
     st.header("Soil mass fractions*")
     #st.write("**Adjust the sliders to input data from a soil test.**")
     
-    if "soil_fracs" not in st.session_state:
-        st.session_state["soil_fracs"] = default_soil_value() #initialise with default
-    
-    default_soil = st.session_state["soil_fracs"]
-    values = st.slider(
-        'Soil fraction',
-        0., 1000., st.session_state["soil_fracs"], label_visibility = "hidden") #, key = "soil_fracs"
-    
-    
-    col1, col2, col3, col4, col5 = st.columns(5, gap = "small")
+    col1, col2 = st.columns([4,3])
     
     with col1:
-        st.write("Clay fraction (g/kg)")
+        if "soil_fracs" not in st.session_state:
+            st.session_state["soil_fracs"] = default_soil_value() #initialise with default
         
-    with col3:
-        st.write("Sand fraction (g/kg)")
-        
-        st.write("**Soil mass fractions (g/kg)**")
-        
-    with col5:
-        st.write("Silt fraction (g/kg)")
+        default_soil = st.session_state["soil_fracs"]
+        values = st.slider(
+            'Soil fraction',
+            0., 1000., st.session_state["soil_fracs"], label_visibility = "hidden") #, key = "soil_fracs"
+            
+        c1, c2, c3, c4, c5 = st.columns(5, gap = "small")
+
+        with c1:
+            st.write("Clay fraction (g/kg)")
+            
+        with c3:
+            st.write("Sand fraction (g/kg)")
+            
+            st.write("**Soil mass fractions (g/kg)**")
+            
+        with c5:
+            st.write("Silt fraction (g/kg)")
+    with col2:
+        path_soil_image = Path(__file__).parent / "../Input_field_data_files/soil_files/pics/soil_texture_triangle.jpg"
+        soil_image = Image.open(path_soil_image)
+        st.image(soil_image, caption = 'Soil Textural Triangle', use_column_width = True)
+    
+    
     
     st.markdown("""---""")
     
     
     col1, col2 = st.columns([1,6], gap = "small")
     
-    st.write(st.session_state["soil_fracs"])
+    st.write("Clay: ", st.session_state["soil_fracs"][0])
+    st.write("Sand: ", st.session_state["soil_fracs"][1] - st.session_state["soil_fracs"][0])
+    st.write("Clay: ", 1000 - st.session_state["soil_fracs"][1])
     #TO BE FIXED - default button
     #with col1:
     #    default = st.button("Restore default", on_click = default_slider_key(default_soil), key="default") #https://docs.streamlit.io/knowledge-base/using-streamlit/widget-updating-session-state
