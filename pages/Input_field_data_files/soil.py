@@ -31,6 +31,13 @@ def select_soil_mass_fracs():
     
     col1, col2 = st.columns([4,3])
     
+    
+    
+    with col2:
+        path_soil_image = Path(__file__).parent / "../Input_field_data_files/soil_files/pics/soil_texture_triangle.jpg"
+        soil_image = Image.open(path_soil_image)
+        st.image(soil_image, caption = 'Soil Textural Triangle', use_column_width = True)
+        
     with col1:
         if "soil_fracs" not in st.session_state:
             st.session_state["soil_fracs"] = default_soil_value() #initialise with default
@@ -52,10 +59,7 @@ def select_soil_mass_fracs():
             
         with c5:
             st.write("Silt fraction (g/kg)")
-    with col2:
-        path_soil_image = Path(__file__).parent / "../Input_field_data_files/soil_files/pics/soil_texture_triangle.jpg"
-        soil_image = Image.open(path_soil_image)
-        st.image(soil_image, caption = 'Soil Textural Triangle', use_column_width = True)
+    
     
     
     
@@ -64,9 +68,14 @@ def select_soil_mass_fracs():
     
     col1, col2 = st.columns([1,6], gap = "small")
     
+    soil_class = soiltexturalclass((st.session_state["soil_fracs"][1] - st.session_state["soil_fracs"][0])/10, st.session_state["soil_fracs"][0]/10)
+    if ["soil_class"] not in st.session_state:
+        st.session_state["soil_class"] = {"soil class": soil_class}
+    
+    st.write("Soil class: ", soil_class)
     st.write("Clay: ", st.session_state["soil_fracs"][0])
     st.write("Sand: ", st.session_state["soil_fracs"][1] - st.session_state["soil_fracs"][0])
-    st.write("Clay: ", 1000 - st.session_state["soil_fracs"][1])
+    st.write("Silt: ", 1000 - st.session_state["soil_fracs"][1])
     #TO BE FIXED - default button
     #with col1:
     #    default = st.button("Restore default", on_click = default_slider_key(default_soil), key="default") #https://docs.streamlit.io/knowledge-base/using-streamlit/widget-updating-session-state

@@ -59,7 +59,7 @@ def get_silt(w, s, e, n):
 
 def default_soil_value():
     try:
-        c_x,c_y = st.session_state.field_loc['centroid'][0], st.session_state.field_loc['centroid'][1]
+        #c_x,c_y = st.session_state.field_loc['centroid'][0], st.session_state.field_loc['centroid'][1]
         poly = st.session_state.field_loc['polygon']
         gdf = gpd.GeoDataFrame(index=[0], crs='epsg:4326', geometry=[poly])
         
@@ -68,11 +68,13 @@ def default_soil_value():
         east = gdf.bounds['maxx'].iloc[0]
         north = gdf.bounds['maxy'].iloc[0]
         
-        clay_val = get_clay(west, south, east, north)
-        #st.write(clay_val)
         
-        sand_val = get_sand(west, south, east, north)
-        #st.write(sand_val)
+        for i in stqdm(range(2),  desc="Retrieving soil texture fractions at the project site"):
+            if i == 0:
+                clay_val = get_clay(west, south, east, north)
+            elif i == 1:
+                sand_val = get_sand(west, south, east, north)
+
         
         #silt_val = get_silt(west, south, east, north)
         #st.write(silt_val)
@@ -83,3 +85,58 @@ def default_soil_value():
     except Exception as e:
         st.write(e)
         print ('There was an error retrieving the soil data.')
+        
+def soiltexturalclass(sand,clay):
+    """Function that returns the USDA 
+    soil textural class given 
+    the percent sand and clay.
+    Source: https://soilwater.github.io/pynotes-agriscience/notebooks/soil_textural_class.html
+    Modified according to notation of AquaCrop in https://github.com/aquacropos/aquacrop/blob/master/aquacrop/entities/soil.py
+    Inputs = Percentage of sand and clay
+    """
+    
+    silt = 100 - sand - clay
+    
+    if sand + clay > 100 or sand < 0 or clay < 0:
+        raise Exception('Inputs adds over 100% or are negative')
+
+    elif silt + 1.5*clay < 15:
+        textural_class = 'Sand'
+
+    elif silt + 1.5*clay >= 15 and silt + 2*clay < 30:
+        textural_class = 'LoamySand'
+
+    elif (clay >= 7 and clay < 20 and sand > 52 and silt + 2*clay >= 30) or (clay < 7 and silt < 50 and silt + 2*clay >= 30):
+        textural_class = 'SandyLoam'
+
+    elif clay >= 7 and clay < 27 and silt >= 28 and silt < 50 and sand <= 52:
+        textural_class = 'Loam'
+
+    elif (silt >= 50 and clay >= 12 and clay < 27) or (silt >= 50 and silt < 80 and clay < 12):
+        textural_class = 'SiltLoam'
+
+    elif silt >= 80 and clay < 12:
+        textural_class = 'Silt'
+
+    elif clay >= 20 and clay < 35 and silt < 28 and sand > 45:
+        textural_class = 'SandyClayLoam'
+
+    elif clay >= 27 and clay < 40 and sand > 20 and sand <= 45:
+        textural_class = 'ClayLoam'
+
+    elif clay >= 27 and clay < 40 and sand <= 20:
+        textural_class = 'SiltyClayLoam'
+
+    elif clay >= 35 and sand > 45:
+        textural_class = 'SandyClay'
+
+    elif clay >= 40 and silt >= 40:
+        textural_class = 'SiltClay'
+
+    elif clay >= 40 and sand <= 45 and silt < 40:
+        textural_class = 'Clay'
+
+    else:
+        textural_class = 'na'
+
+    return textural_class
