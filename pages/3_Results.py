@@ -23,7 +23,7 @@ with st.sidebar.container():
 
 selected = option_menu(
     menu_title = None, #required
-    options = ["Irrigation", "Tank use", "Solar-pump sizing"],  #required
+    options = ["Rainfed results", "Tank use", "Solar-pump sizing"],  #required
     default_index = 0,  #optional
     orientation = "horizontal",
     styles={
@@ -34,18 +34,20 @@ selected = option_menu(
     })
 
 
-if selected == "Irrigation":
+if selected == "Rainfed results":
     
     from pages.Results_files.irrigation import *
-    prepare_climate_file()
+    #prepare_climate_file()
+    irrigation_results()
+    
     
 if selected == "Tank use":
     
-    from pages.Results_files.tank import *
-    tank_specification()
+    from pages.Results_files.tank_use import *
+    hello_world()
     #select_tank_loc()
     
 if selected == "Solar-pump sizing":
     
-    from pages.Results_files.pump import *
-    select_pump()
+    from pages.Results_files.solar_pump_sizing import *
+    hello_world()

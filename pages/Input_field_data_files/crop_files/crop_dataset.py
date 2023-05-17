@@ -17,7 +17,7 @@ def crop_type(n):
     elif n==3:
         return "Fruit/ grain"
             
-
+#Source: https://github.com/aquacropos/aquacrop/blob/master/aquacrop/entities/crops/crop_params.py
 crop_parameters={'Barley': {'Aer': 15.0,
   'CCx': 0.8,
   'CDC': -9.0,

@@ -13,3 +13,5 @@ streamlit_aggrid==0.3.4.post3
 pvlib==0.9.5
 soilgrids==0.1.4
 stqdm==0.0.5
+aquacrop==2.2.3
+seaborn==0.12.2

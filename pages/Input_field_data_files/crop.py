@@ -42,7 +42,7 @@ def select_crop():
     
     if run_crop:
         st.session_state["crop_type"] = results_crop
-        #st.write(results_crop)
+        st.write(results_crop["crop"][0]["Name"])
  
     
     
@@ -55,7 +55,7 @@ def select_sowing_date():
     label = "",
     )
     #st.write(d)
-    results_sowing_date = {'sowing_date': d}
+    results_sowing_date = {"sowing date": d}
     
     run_sowing_date = st.button('Confirm sowing date')
     
@@ -63,7 +63,7 @@ def select_sowing_date():
           
     if run_sowing_date:
         st.session_state["sowing_date"] = results_sowing_date
-        #st.write(results_sowing_date)
+        st.write(results_sowing_date["sowing date"])
         st.write("**Proceed to add a Solar Pumping System (SPS)**")
         
         st.markdown("""---""")

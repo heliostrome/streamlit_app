@@ -14,9 +14,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 
-def hi():
-    st.write("This is retrieve precipitation")
-    
+
 def get_lat_long():
     
     lon = st.session_state.field_loc['centroid'][0]
@@ -34,7 +32,7 @@ def convert_date(date_text):
 def get_start_end_dates():
     
     if "sowing_date" in st.session_state:
-        sowing_date = st.session_state.sowing_date["sowing_date"]
+        sowing_date = st.session_state.sowing_date["sowing date"]
         year = max(sowing_date.year - 1, datetime.datetime.now().year -1)  #the relevant year for the selection of precipitation data
           
     else:
@@ -84,6 +82,7 @@ def draw_precipitation():
     df.index = pd.to_datetime(df["time"])
     #df.drop(labels  =["time"], axis = 1, inplace = True)    
     
+    #Groups by month
     dfm = df["precip"].groupby(lambda x: x.month).sum()
     
     #st.line_chart(data = df, x = "time", y = "precip")
@@ -97,7 +96,9 @@ def draw_precipitation():
     #date_form = DateFormatter("%B")
     #ax.xaxis.set_major_formatter(date_form)
     #fig.autofmt_xdate()
-    st.pyplot(fig = fig, clear_figure = False)
+    ax.set_xlabel("")
+    ax.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
+    st.pyplot(fig = fig, clear_figure = True)
     return df["precip"]
     
         

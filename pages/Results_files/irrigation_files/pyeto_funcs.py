@@ -11,6 +11,8 @@ def svp_from_t(t):
     """
     Estimate saturation vapour pressure (*es*) from air temperature.
     Based on equations 11 and 12 in Allen et al (1998).
+    Also known as Tetens equation: https://en.wikipedia.org/wiki/Tetens_equation
+    Highly accurate in 0 to 50 deg C range.
     :param t: Temperature [deg C]
     :return: Saturation vapour pressure [kPa]
     :rtype: float
@@ -63,6 +65,22 @@ def psy_const(atmos_pres):
     """
     return 0.000665 * atmos_pres
 
+def wind_speed_2m(ws, z):
+    """
+    Convert wind speed measured at different heights above the soil
+    surface to wind speed at 2 m above the surface, assuming a short grass
+    surface.
+
+    Based on FAO equation 47 in Allen et al (1998).
+
+    :param ws: Measured wind speed [m s-1]
+    :param z: Height of wind measurement above ground surface [m]
+    :return: Wind speed at 2 m above the surface [m s-1]
+    :rtype: float
+    """
+    return ws * (4.87 / math.log((67.8 * z) - 5.42))
+
+
 def fao56_penman_monteith(net_rad, t, ws, svp, avp, delta_svp, psy, shf=0.0):
     """
     Estimate reference evapotranspiration (ETo) from a hypothetical
@@ -104,8 +122,26 @@ def celsius2kelvin(celsius):
     """
     return celsius + 273.15
 
+def watthour2megajoule(watthour):
+    """
+    Convert energy in Watt-hour to mega Joule.
+    :param watthour: Watt-hour
+    :return: mega Joule
+    :rtype: float
+    """
+    return watthour * 3.6e-3
+
 def date_formatter(date_text):
     try:
         return datetime.date.fromisoformat(date_text)
     except ValueError:
         raise ValueError("Incorrect data format, should be YYYY-MM-DD")
+        
+def Pascal2kiloPascal (pascal):
+    """
+    Convert pressure in Pascal to kilo-Pascal.
+    :param watthour: Pascal
+    :return: kilo Pascal
+    :rtype: float
+    """
+    return pascal * 1e-3
