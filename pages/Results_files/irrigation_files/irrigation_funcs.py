@@ -20,6 +20,9 @@ from aquacrop.utils import prepare_weather
 from datetime import datetime
 import matplotlib.pyplot as plt
 import seaborn as sns
+import os
+
+os.environ['DEVELOPMENT'] = 'DEVELOPMENT'
 
 def say_hi():
     st.write('Hi')
