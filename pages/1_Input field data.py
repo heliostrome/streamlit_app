@@ -41,6 +41,7 @@ if selected == "Field location":
 if selected == "Soil":
     from pages.Input_field_data_files.soil import *
     select_soil_mass_fracs()
+    #select_soil()
     
 if selected == "Crop":
     #from Input_field_data_files import field_location

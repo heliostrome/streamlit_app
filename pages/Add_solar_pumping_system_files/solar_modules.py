@@ -33,11 +33,11 @@ def select_module():
             ghi = draw_local_irradiance()
             
         except Exception as e:
-            #st.write(e)
+            st.write(e)
             st.write("The field location has not yet been selected")
     with col1:
         try:
-            st.write(f'Annual Insolation:   {ghi.sum()/1000:.2f} $kWh/m^{2}$')
+            st.write(f'Annual Insolation:   {ghi.sum()/1000:.2f} kWh/m$^{2}$')
         except Exception as e:
             #st.write(e)
             pass

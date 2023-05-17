@@ -25,6 +25,8 @@ def select_irrigation_method():
     with col2:
         try:
             rain = draw_precipitation()
+            if "precipitation" not in st.session_state:
+                st.session_state["precipitation"] = rain
             
         except Exception as e:
             #st.write(e)

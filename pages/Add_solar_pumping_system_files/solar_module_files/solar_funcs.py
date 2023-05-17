@@ -27,7 +27,7 @@ from .solar_module_dataset import *
 def get_start_end_dates():
     
     if "sowing_date" in st.session_state:
-        sowing_date = st.session_state.sowing_date["sowing_date"]
+        sowing_date = st.session_state.sowing_date["sowing date"]
         
         year = max(sowing_date.year - 1, datetime.datetime.now().year -1)  #the relevant year for the selection of precipitation data
           
@@ -239,6 +239,7 @@ def draw_local_irradiance():
     #ax = df["ghi"].plot(color = "gold")
     dfm.plot.bar(ax = ax, color = "gold")
     ax.set_ylabel("Global Horizontal Insolation\n($kWh/m^{2}$)")
+    ax.set_xticklabels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
     #fig.autofmt_xdate()
     st.pyplot(fig = fig, clear_figure = True)
     
