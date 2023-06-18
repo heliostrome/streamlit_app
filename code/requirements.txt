@@ -1,0 +1,17 @@
+geopandas==0.12.2
+leafmap==0.18.8
+numpy
+pandas==1.5.3
+Pillow==9.5.0
+pyproj==3.5.0
+Shapely==1.8.1
+streamlit==1.20.0
+streamlit_folium==0.11.1
+streamlit_keyup==0.2.0
+streamlit_option_menu==0.3.2
+streamlit_aggrid==0.3.4.post3
+pvlib==0.9.5
+soilgrids==0.1.4
+stqdm==0.0.5
+aquacrop==2.2.3
+seaborn==0.12.2
