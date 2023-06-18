@@ -14,7 +14,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   location: location
 }
 
-// create the resource within the group
+// create the resources within the group
 module rg_resources 'rg.bicep' = {
   name: 'rg_resources'
   scope: rg

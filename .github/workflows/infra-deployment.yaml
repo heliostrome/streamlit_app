@@ -3,13 +3,14 @@ name: deploy the app
 on:
   push:
     paths:
-      - 'code/**'
+      - 'bicep/**'
     branches:
       - azure
 jobs:
 # deploy the bicep file
   infra-deploy:
     runs-on: ubuntu-latest
+    environment: 'nonprod'
     steps:
       - uses: actions/checkout@v2
       # Log in to Azure
@@ -20,8 +21,8 @@ jobs:
       - name: deploy
         uses: azure/arm-deploy@v1
         with:
-          subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
-          resourceGroupName: ${{ secrets.AZURE_RG }}
+          scope: 'Subscription'
+          region: {{vars.LOCATION}}
           template: ./main.bicep
-          parameters: 'storagePrefix=mystore storageSKU=Standard_LRS'
+          parameters: 'prefix={{ vars.PREFIX }} environment={{ vars.ENVIRONMENT}} location={{ vars.LOCATION }}'
           failOnStdErr: false
