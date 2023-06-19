@@ -58,19 +58,20 @@ resource privateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLin
   }
 }
 
-resource pvtEndpointDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-05-01' = {
-  name: pvtEndpointDnsGroupName
-  properties: {
-    privateDnsZoneConfigs: [
-      {
-        name: pvtDnsZoneConfigName
-        properties: {
-          privateDnsZoneId: privateDnsZone.id
-        }
-      }
-    ]
-  }
-}
+// resource pvtEndpointDnsGroup 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2021-05-01' = {
+//   name: pvtEndpointDnsGroupName
+//   parent: privateDnsZone
+//   properties: {
+//     privateDnsZoneConfigs: [
+//       {
+//         name: pvtDnsZoneConfigName
+//         properties: {
+//           privateDnsZoneId: privateDnsZone.id
+//         }
+//       }
+//     ]
+//   }
+// }
 
 output vnetName string = vnet.name
 output frontendSubnetName string = vnet.properties.subnets[0].name
