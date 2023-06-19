@@ -15,13 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
+        working-directory: ./code
         run: docker build . -t hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.WEB_APP_IMAGE_NAME }}:${{ github.sha }}
-      - name: Log in to Azure Container Registry
-        uses: azure/docker-login@v1
+      - uses: azure/login@v1
+        name: Login to azure
         with:
-          login-server: ${{ secrets.REGISTRY_NAME }}.azurecr.io
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Push the Docker image
         run: docker push hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.WEB_APP_IMAGE_NAME }}:${{ github.sha }}
   # deploy the app to the azure web app
