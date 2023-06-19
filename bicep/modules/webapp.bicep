@@ -47,4 +47,4 @@ resource networkConfig 'Microsoft.Web/sites/networkConfig@2022-09-01' = {
   }
 }
 
-output webAppIdentityId string = webApp.identity.principalId
+output webAppPrincipalIdentityId string = webApp.identity.principalId

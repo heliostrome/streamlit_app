@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'code/**'
+      - '.github/workflows/app-deployment.yaml'
     branches:
       - azure
 jobs:

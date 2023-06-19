@@ -21,9 +21,9 @@ jobs:
       # Retrieve the principalId
       - name: Get principalId
         run: |
-          az login --identity
-          principalId=$(az account show --query "user.name" -o tsv)
-          echo "githubActionsPrincipalId=${principalId}" >> "$GITHUB_ENV"
+          SECRETS_JSON="${{ secrets.AZURE_CREDENTIALS }}"
+          CLIENT_ID=$(echo "$AZURE_CREDENTIALS" | jq -r '.ClientId')
+          echo "githubActionsPrincipalId=${CLIENT_ID}" >> "$GITHUB_ENV"
         # Deploy Bicep file
       - name: deploy
         uses: azure/arm-deploy@v1
