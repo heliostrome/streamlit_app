@@ -30,7 +30,8 @@ jobs:
         with:
           scope: 'subscription'
           region: ${{ vars.LOCATION }}
-          template: ./main.bicep
+          
+          template: ./bicep/main.bicep
           parameters: >
             prefix=${{ vars.PREFIX }} 
             environment=${{ vars.ENVIRONMENT}} 
