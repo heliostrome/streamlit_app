@@ -41,7 +41,7 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           publish-profile: ${{ steps.webapp.outputs.publishProfile }}
-          package: ${{ vars.APPLICATION_PREFIX}}-${{ vars.ENVIRONMENT_NAME}}-acr.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+          package: ${{ vars.APPLICATION_PREFIX}}${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
       - name: Reset WebApp/FunctionApp publish profile
         id: reset
         uses: aliencube/publish-profile-actions@v1
