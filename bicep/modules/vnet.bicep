@@ -28,6 +28,14 @@ resource vnet 'Microsoft.Network/virtualNetworks@2022-11-01' = {
         name: frontendSubnetName
         properties: {
           addressPrefix: frontendSubnetPrefix
+          delegations: [
+            {
+              name: 'Microsoft.Web/serverFarms'
+              properties: {
+                serviceName: 'Microsoft.Web/serverFarms'
+              }
+            }
+          ]
         }
       }
       {
