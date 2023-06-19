@@ -1,4 +1,4 @@
-name: deploy the app
+name: deploy the azure infrastructure
 #when a push is made to the master branch, within the folder code, run the deployment job
 on:
   push:
