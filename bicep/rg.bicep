@@ -68,5 +68,21 @@ module keyVaultRBACModule 'modules/keyvaultrbac.bicep' = {
   }
 }
 
+module acr 'modules/containerregistry.bicep' = {
+  name: 'acrDeployment'
+  params: {
+    prefix: prefix
+    environment: environment
+    location: location
+  }
+}
+
+module arcRBAC 'modules/containerregistryrbac.bicep' = {
+  name: 'arcRBACDeployment'
+  params: {
+    acrName: acr.outputs.acrName
+    principalIds: [webAppModule.outputs.webAppPrincipalIdentityId ]
+  }
+}
 
 
