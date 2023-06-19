@@ -22,7 +22,7 @@ jobs:
       - name: Get principalId
         run: |
           SECRETS_JSON="${{ secrets.AZURE_CREDENTIALS }}"
-          CLIENT_ID=$(echo "$AZURE_CREDENTIALS" | jq -r '.clientId')
+          CLIENT_ID=$(echo "$SECRETS_JSON" | jq -r '.clientId')
           echo "githubActionsPrincipalId=${CLIENT_ID}" >> "$GITHUB_ENV"
         # Deploy Bicep file
       - name: deploy

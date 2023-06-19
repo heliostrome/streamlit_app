@@ -9,6 +9,10 @@ resource asp 'Microsoft.Web/serverfarms@2022-09-01' = {
   properties: {    
     reserved: true    
   }
+  sku: {
+    name: 'Y1'
+    tier: 'Dynamic'
+  }
   
 }
 

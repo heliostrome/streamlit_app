@@ -8,7 +8,7 @@ var backendSubnetPrefix = '10.0.2.0/24'
 var frontendSubnetName = '${prefix}-${environment}-frontend-subnet'
 var backendSubnetName = '${prefix}-${environment}-backend-subnet'
 
-var pvtDnsZoneName = '${prefix}-${environment}-pvtdnszone'
+var pvtDnsZoneName = 'privatelink${az.environment().suffixes.sqlServerHostname}'
 var pvtEndpointDnsGroupName = '${prefix}-${environment}-pvtendpointdnsgrp'
 var pvtDnsZoneLinkName = '${prefix}-${environment}-pvtdnszonelink'
 var pvtDnsZoneConfigName = 'config1'
