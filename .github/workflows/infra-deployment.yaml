@@ -18,12 +18,6 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-      # Retrieve the principalId
-      - name: Get principalId
-        run: |
-          SECRETS_JSON=${{ secrets.AZURE_CREDENTIALS }}
-          CLIENT_ID=$(echo "$SECRETS_JSON" | jq -r '.clientId')
-          echo "githubActionsPrincipalId=${CLIENT_ID}" >> "$GITHUB_ENV"
         # Deploy Bicep file
       - name: deploy
         uses: azure/arm-deploy@v1
@@ -36,7 +30,7 @@ jobs:
             prefix=${{ vars.APPLICATION_PREFIX }} 
             environment=${{ vars.ENVIRONMENT_NAME}} 
             location=${{ vars.LOCATION }} 
-            githubActionsPrincipalId=${{ env.githubActionsPrincipalId }}
+            githubActionsPrincipalId=${{ vars.GH_ACTIONS_PRINCIPALID }}
             sqlServerAdminLogin=${{ vars.SQL_SERVER_ADMIN_LOGIN }}
             sqlServerAdminLoginPassword=${{ secrets.SQL_SERVER_ADMIN_LOGIN_PASSWORD }}
           failOnStdErr: true
