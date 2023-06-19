@@ -74,6 +74,7 @@ module acr 'modules/containerregistry.bicep' = {
     prefix: prefix
     environment: environment
     location: location
+    keyVaultName: keyVaultModule.outputs.keyVaultName
   }
 }
 
