@@ -28,7 +28,7 @@ jobs:
       - name: deploy
         uses: azure/arm-deploy@v1
         with:
-          scope: 'Subscription'
+          scope: 'subscription'
           region: ${{ vars.LOCATION }}
           template: ./main.bicep
           parameters: >
