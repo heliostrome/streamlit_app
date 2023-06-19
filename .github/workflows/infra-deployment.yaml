@@ -30,8 +30,7 @@ jobs:
         with:
           scope: 'subscription'
           region: ${{ vars.LOCATION }}
-          
-          template: ./bicep/main.bicep
+          template: ./main.bicep
           parameters: >
             prefix=${{ vars.PREFIX }} 
             environment=${{ vars.ENVIRONMENT}} 
@@ -40,3 +39,4 @@ jobs:
             sqlServerAdminLogin=${{ vars.SQL_SERVER_ADMIN_LOGIN }}
             sqlServerAdminLoginPassword=${{ secrets.SQL_SERVER_ADMIN_LOGIN_PASSWORD }}
           failOnStdErr: true
+        working-directory: ./bicep
