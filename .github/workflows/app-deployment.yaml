@@ -29,8 +29,8 @@ jobs:
       - uses: azure/docker-login@v1
         with:
           login-server: hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io
-          username: ${{ steps.myGetSecretAction.outputs.acrpassword }}
-          password: ${{ steps.myGetSecretAction.outputs.acrusername }}
+          username: ${{ steps.myGetSecretAction.outputs.acrusername }}
+          password: ${{ steps.myGetSecretAction.outputs.acrpassword }}
       - name: Push the Docker image
         run: docker push hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.WEB_APP_IMAGE_NAME }}:${{ github.sha }}
   # deploy the app to the azure web app
