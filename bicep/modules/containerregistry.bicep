@@ -37,5 +37,4 @@ resource secretUsername 'Microsoft.KeyVault/vaults/secrets@2023-02-01' = {
 }
 
 output acrName string = acr.name
-output secretPasswordName string = secretPassword.name
 output secretUsernameName string = secretUsername.name

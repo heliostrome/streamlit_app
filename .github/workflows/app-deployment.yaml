@@ -21,7 +21,7 @@ jobs:
       - uses: Azure/get-keyvault-secrets@v1
         with: 
           keyvault: "${{vars.APPLICATION_PREFIX}}-${{vars.ENVIRONMENT_NAME}}-kv"
-          secrets: 'acrPassword, acrUsername'
+          secrets: 'acrpassword, acrusername'
         id: myGetSecretAction
       - name: Build the Docker image
         working-directory: ./code
@@ -29,8 +29,8 @@ jobs:
       - uses: azure/docker-login@v1
         with:
           login-server: hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io
-          username: ${{ steps.myGetSecretAction.outputs.containerUsername }}
-          password: ${{ steps.myGetSecretAction.outputs.containerPassword }}
+          username: ${{ steps.myGetSecretAction.outputs.acrpassword }}
+          password: ${{ steps.myGetSecretAction.outputs.acrusername }}
       - name: Push the Docker image
         run: docker push hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.WEB_APP_IMAGE_NAME }}:${{ github.sha }}
   # deploy the app to the azure web app
