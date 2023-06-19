@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'bicep/**'
+      - '.github/workflows/infra-deployment.yaml'
     branches:
       - azure
 jobs:
