@@ -39,25 +39,34 @@ jobs:
     environment: 'nonprod'
     needs: build
     steps:
-      - name: Get WebApp/FunctionApp publish profile
-        id: webapp
-        uses: aliencube/publish-profile-actions@v1
-        env:
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      # - name: Get WebApp/FunctionApp publish profile
+      #   id: webapp
+      #   uses: aliencube/publish-profile-actions@v1
+      #   env:
+      #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      #   with:
+      #     resourceGroupName:  '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-rg'
+      #     appName: '$${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-webapp'
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
         with:
-          resourceGroupName:  '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT}}-rg'
-          appName: '$${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT}}-webapp'
-      - name: Deploy to WebApp/FunctionApp
-        uses: azure/webapps-deploy@v2
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: azure/webapps-deploy@v2
+        name: Deploy to WebApp/FunctionApp
         with:
-          publish-profile: ${{ steps.webapp.outputs.publishProfile }}
-          package: hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
-      - name: Reset WebApp/FunctionApp publish profile
-        id: reset
-        uses: aliencube/publish-profile-actions@v1
-        env:
-          AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
-        with:
-          resourceGroupName: '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-rg'
-          appName: '$${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-webapp'
-          reset: true
+          app-name: '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-webapp'
+          images: hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+      # - name: Deploy to WebApp/FunctionApp
+      #   uses: azure/webapps-deploy@v2
+      #   with:
+      #     publish-profile: ${{ steps.webapp.outputs.publishProfile }}
+      #     package: 
+      # - name: Reset WebApp/FunctionApp publish profile
+      #   id: reset
+      #   uses: aliencube/publish-profile-actions@v1
+      #   env:
+      #     AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
+      #   with:
+      #     resourceGroupName: '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-rg'
+      #     appName: '$${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-webapp'
+      #     reset: true
