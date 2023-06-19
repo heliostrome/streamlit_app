@@ -17,6 +17,12 @@ jobs:
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      # Retrieve the principalId
+      - name: Get principalId
+        run: |
+          az login --identity
+          principalId=$(az account show --query "user.name" -o tsv)
+          echo "githubActionsPrincipalId=${principalId}" >> "$GITHUB_ENV"
         # Deploy Bicep file
       - name: deploy
         uses: azure/arm-deploy@v1
@@ -24,5 +30,11 @@ jobs:
           scope: 'Subscription'
           region: {{vars.LOCATION}}
           template: ./main.bicep
-          parameters: 'prefix={{ vars.PREFIX }} environment={{ vars.ENVIRONMENT}} location={{ vars.LOCATION }}'
-          failOnStdErr: false
+          parameters: >
+            prefix={{ vars.PREFIX }} 
+            environment={{ vars.ENVIRONMENT}} 
+            location={{ vars.LOCATION }} 
+            githubActionsPrincipalId={{ env.githubActionsPrincipalId }}
+            sqlServerAdminLogin={{ vars.SQL_SERVER_ADMIN_LOGIN }}
+            sqlServerAdminLoginPassword={{ secrets.SQL_SERVER_ADMIN_LOGIN_PASSWORD }}
+          failOnStdErr: true

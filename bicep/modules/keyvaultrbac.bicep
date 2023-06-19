@@ -1,8 +1,6 @@
 param keyVaultName string
 param principalIds array
-param keyVaultSecretUserId string = '4633458b-17de-408a-b874-0445c86b69e6'
-
-
+var keyVaultSecretUserId = '4633458b-17de-408a-b874-0445c86b69e6'
 
 resource kv 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
   name: keyVaultName
