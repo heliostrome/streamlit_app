@@ -10,11 +10,12 @@ on:
 jobs:
   # build the docker image and push to the azure registry
   build:
+    environment: 'nonprod'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build . -t ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+        run: docker build . -t ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ secrets.WEB_APP_IMAGE_NAME }}:${{ github.sha }}
       - name: Log in to Azure Container Registry
         uses: azure/docker-login@v1
         with:
@@ -22,7 +23,7 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Push the Docker image
-        run: docker push ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+        run: docker push ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ secrets.WEB_APP_IMAGE_NAME }}:${{ github.sha }}
   # deploy the app to the azure web app
   deploy:
     runs-on: ubuntu-latest
@@ -40,13 +41,13 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           publish-profile: ${{ steps.webapp.outputs.publishProfile }}
-          package: ${{ vars.REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+          package: ${{ vars.APPLICATION_PREFIX}}-${{ vars.ENVIRONMENT_NAME}}-acr.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
       - name: Reset WebApp/FunctionApp publish profile
         id: reset
         uses: aliencube/publish-profile-actions@v1
         env:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         with:
-          resourceGroupName: '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT}}-rg'
-          appName: '$${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT}}-webapp'
+          resourceGroupName: '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-rg'
+          appName: '$${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-webapp'
           reset: true
