@@ -9,9 +9,9 @@ var frontendSubnetName = '${prefix}-${environment}-frontend-subnet'
 var backendSubnetName = '${prefix}-${environment}-backend-subnet'
 
 var pvtDnsZoneName = 'privatelink${az.environment().suffixes.sqlServerHostname}'
-var pvtEndpointDnsGroupName = '${prefix}-${environment}-pvtendpointdnsgrp'
+// var pvtEndpointDnsGroupName = '${prefix}-${environment}-pvtendpointdnsgrp'
 var pvtDnsZoneLinkName = '${prefix}-${environment}-pvtdnszonelink'
-var pvtDnsZoneConfigName = 'config1'
+// var pvtDnsZoneConfigName = 'config1'
 
 //create a vnet
 resource vnet 'Microsoft.Network/virtualNetworks@2022-11-01' = {
