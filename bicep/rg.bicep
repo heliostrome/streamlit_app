@@ -4,7 +4,7 @@ param location string
 param githubActionsPrincipalId string
 @secure()
 param sqlServerAdminLoginPassword string
-param sqlServerAdminLogin string
+// param sqlServerAdminLogin string
 
 module keyVaultModule 'modules/keyvault.bicep' = {
   name: 'keyVaultDeployment'

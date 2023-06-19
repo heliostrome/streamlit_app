@@ -8,7 +8,7 @@ param location string
 param githubActionsPrincipalId string
 @secure()
 param sqlServerAdminLoginPassword string
-param sqlServerAdminLogin string
+// param sqlServerAdminLogin string
 // set the scope to the subscription for this bicep file
 targetScope = 'subscription'
 
@@ -28,7 +28,7 @@ module rg_resources 'rg.bicep' = {
     location: location
     githubActionsPrincipalId: githubActionsPrincipalId
     sqlServerAdminLoginPassword: sqlServerAdminLoginPassword
-    sqlServerAdminLogin: sqlServerAdminLogin
+    // sqlServerAdminLogin: sqlServerAdminLogin
   }
 }
 
