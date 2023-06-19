@@ -27,16 +27,16 @@ jobs:
         # Deploy Bicep file
       - name: deploy
         uses: azure/arm-deploy@v1
+        # working-directory: ./bicep
         with:
           scope: 'subscription'
           region: ${{ vars.LOCATION }}
-          template: ./main.bicep
+          template: ./bicep/main.bicep
           parameters: >
             prefix=${{ vars.PREFIX }} 
-            environment=${{ vars.ENVIRONMENT}} 
+            environment=${{ vars.ENVIRONMENT_NAME}} 
             location=${{ vars.LOCATION }} 
             githubActionsPrincipalId=${{ env.githubActionsPrincipalId }}
             sqlServerAdminLogin=${{ vars.SQL_SERVER_ADMIN_LOGIN }}
             sqlServerAdminLoginPassword=${{ secrets.SQL_SERVER_ADMIN_LOGIN_PASSWORD }}
           failOnStdErr: true
-        working-directory: ./bicep
