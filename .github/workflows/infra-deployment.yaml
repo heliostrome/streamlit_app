@@ -28,13 +28,13 @@ jobs:
         uses: azure/arm-deploy@v1
         with:
           scope: 'Subscription'
-          region: {{vars.LOCATION}}
+          region: ${{ vars.LOCATION }}
           template: ./main.bicep
           parameters: >
-            prefix={{ vars.PREFIX }} 
-            environment={{ vars.ENVIRONMENT}} 
-            location={{ vars.LOCATION }} 
-            githubActionsPrincipalId={{ env.githubActionsPrincipalId }}
-            sqlServerAdminLogin={{ vars.SQL_SERVER_ADMIN_LOGIN }}
-            sqlServerAdminLoginPassword={{ secrets.SQL_SERVER_ADMIN_LOGIN_PASSWORD }}
+            prefix=${{ vars.PREFIX }} 
+            environment=${{ vars.ENVIRONMENT}} 
+            location=${{ vars.LOCATION }} 
+            githubActionsPrincipalId=${{ env.githubActionsPrincipalId }}
+            sqlServerAdminLogin=${{ vars.SQL_SERVER_ADMIN_LOGIN }}
+            sqlServerAdminLoginPassword=${{ secrets.SQL_SERVER_ADMIN_LOGIN_PASSWORD }}
           failOnStdErr: true

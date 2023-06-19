@@ -33,19 +33,19 @@ jobs:
         env:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         with:
-          resourceGroupName: '<RESOURCE_GROUP_NAME>'
-          appName: '<WEBAPP_NAME>'
+          resourceGroupName:  '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT}}-rg'
+          appName: '$${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT}}-webapp'
       - name: Deploy to WebApp/FunctionApp
         uses: azure/webapps-deploy@v2
         with:
           publish-profile: ${{ steps.webapp.outputs.publishProfile }}
-          package: ${{ secrets.REGISTRY_NAME }}.azurecr.io/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+          package: ${{ vars.REGISTRY_NAME }}.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
       - name: Reset WebApp/FunctionApp publish profile
         id: reset
         uses: aliencube/publish-profile-actions@v1
         env:
           AZURE_CREDENTIALS: ${{ secrets.AZURE_CREDENTIALS }}
         with:
-          resourceGroupName: '<RESOURCE_GROUP_NAME>'
-          appName: '<FUNCTIONAPP_NAME>'
+          resourceGroupName: '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT}}-rg'
+          appName: '$${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT}}-webapp'
           reset: true
