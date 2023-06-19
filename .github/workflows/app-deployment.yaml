@@ -14,13 +14,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build the Docker image
-        working-directory: ./code
-        run: docker build . -t hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.WEB_APP_IMAGE_NAME }}:${{ github.sha }}
       - uses: azure/login@v1
         name: Login to azure
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - uses: Azure/get-keyvault-secrets@v1
+        with: 
+          keyvault: "${{vars.APPLICATION_PREFIX}}-${{vars.ENVIRONMENT_NAME}}-kv"
+          secrets: 'acrPassword, acrUsername'
+        id: myGetSecretAction
+      - name: Build the Docker image
+        working-directory: ./code
+        run: docker build . -t hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.WEB_APP_IMAGE_NAME }}:${{ github.sha }}  
+      - uses: azure/docker-login@v1
+        with:
+          login-server: hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io
+          username: ${{ steps.myGetSecretAction.outputs.containerUsername }}
+          password: ${{ steps.myGetSecretAction.outputs.containerPassword }}
       - name: Push the Docker image
         run: docker push hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.WEB_APP_IMAGE_NAME }}:${{ github.sha }}
   # deploy the app to the azure web app
