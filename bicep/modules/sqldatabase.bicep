@@ -3,6 +3,9 @@ param location string
 param environment string
 param vnetName string
 param backendSubnetName string
+@secure()
+param sqlServerAdminLoginPassword string
+param sqlServerAdminLogin string
 
 var databaseName = '${prefix}-${environment}-db'
 var privateEndpointName = '${prefix}-${environment}-sqlserver-pe'
@@ -21,8 +24,8 @@ resource sqlServer 'Microsoft.Sql/servers@2022-11-01-preview' = {
   name: '${prefix}-${environment}-sqlserver'
   location: location
   properties: {
-    administratorLogin: 'sqladmin'
-    administratorLoginPassword: 'P@ssw0rd'
+    administratorLogin: sqlServerAdminLogin
+    administratorLoginPassword:  sqlServerAdminLoginPassword
     version: '12.0'
   }
 }

@@ -5,6 +5,7 @@ param appServicePlanName string
 param vnetName string
 param frontendSubNetName string
 
+
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
   name: vnetName
 }
@@ -33,6 +34,9 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
       ]
     }
   }
+  identity: {
+    type: 'SystemAssigned'
+  }
 }
 
 resource networkConfig 'Microsoft.Web/sites/networkConfig@2022-09-01' = {
@@ -42,3 +46,5 @@ resource networkConfig 'Microsoft.Web/sites/networkConfig@2022-09-01' = {
     subnetResourceId: subnet.id
   }
 }
+
+output webAppIdentityId string = webApp.identity.principalId
