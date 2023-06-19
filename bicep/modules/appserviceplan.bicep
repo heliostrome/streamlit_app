@@ -13,6 +13,7 @@ resource asp 'Microsoft.Web/serverfarms@2022-09-01' = {
     name: 'S1'
     tier: 'Standard'
   }
+  kind: 'linux'
   
 }
 
