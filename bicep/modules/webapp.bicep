@@ -21,7 +21,7 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' existing = {
 }
 
 resource webApp 'Microsoft.Web/sites@2022-09-01' = {
-  name: '${prefix}-${location}-${environment}-webapp'
+  name: '${prefix}-${environment}-webapp'
   location: location
   properties: {
     serverFarmId: appServicePlan.id
