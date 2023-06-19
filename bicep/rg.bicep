@@ -47,18 +47,18 @@ module webAppModule 'modules/webapp.bicep' = {
   }
 }
 
-module sqlServerModule 'modules/sqldatabase.bicep' = {
-  name: 'sqlServerDeployment'
-  params: {
-    prefix: prefix
-    environment: environment
-    location: location
-    vnetName: vnetModule.outputs.vnetName
-    backendSubnetName: vnetModule.outputs.backendSubnetName
-    sqlServerAdminLogin: sqlServerAdminLogin
-    sqlServerAdminLoginPassword: sqlServerAdminLoginPassword
-  }
-}
+// module sqlServerModule 'modules/sqldatabase.bicep' = {
+//   name: 'sqlServerDeployment'
+//   params: {
+//     prefix: prefix
+//     environment: environment
+//     location: location
+//     vnetName: vnetModule.outputs.vnetName
+//     backendSubnetName: vnetModule.outputs.backendSubnetName
+//     sqlServerAdminLogin: sqlServerAdminLogin
+//     sqlServerAdminLoginPassword: sqlServerAdminLoginPassword
+//   }
+// }
 
 module keyVaultRBACModule 'modules/keyvaultrbac.bicep' = {
   name: 'keyVaultRBACDeployment'

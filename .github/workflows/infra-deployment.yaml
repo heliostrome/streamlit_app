@@ -33,7 +33,7 @@ jobs:
           region: ${{ vars.LOCATION }}
           template: ./bicep/main.bicep
           parameters: >
-            prefix=${{ vars.PREFIX }} 
+            prefix=${{ vars.APPLICATION_PREFIX }} 
             environment=${{ vars.ENVIRONMENT_NAME}} 
             location=${{ vars.LOCATION }} 
             githubActionsPrincipalId=${{ env.githubActionsPrincipalId }}
