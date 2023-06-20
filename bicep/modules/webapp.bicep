@@ -32,14 +32,6 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
       alwaysOn: true
       appSettings: [
         {
-          name: 'BLOB_ACCOUNT_NAME'
-          value: storageAccountConnectionProperties.storageAccountName
-        }
-        {
-          name: 'BLOB_CONTAINER_NAME'
-          value: storageAccountConnectionProperties.containerName
-        }
-        {
           name: 'BLOB_ACCOUNT_KEY'
           value: '@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=${storageAccountConnectionProperties.secretName})'
         }
