@@ -35,6 +35,16 @@ module aspModule 'modules/appserviceplan.bicep' = {
   }
 }
 
+module storageAccount 'modules/storageaccount.bicep' = {
+  name: 'storageAccountDeployment'
+  params: {
+    prefix: prefix
+    environment: environment
+    location: location
+    keyVaultName: keyVaultModule.outputs.keyVaultName
+  }
+}
+
 module webAppModule 'modules/webapp.bicep' = {
   name: 'webAppDeployment'
   params: {
@@ -44,6 +54,9 @@ module webAppModule 'modules/webapp.bicep' = {
     appServicePlanName: aspModule.outputs.appServicePlanName
     vnetName: vnetModule.outputs.vnetName
     frontendSubNetName: vnetModule.outputs.frontendSubnetName
+    keyVaultName: keyVaultModule.outputs.keyVaultName
+    storageAccountConnectionProperties: storageAccount.outputs.storageAccountConnectionProperties
+    acrConnectionProperties: acr.outputs.acrConnectionProperties
   }
 }
 

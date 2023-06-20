@@ -4,7 +4,9 @@ param environment string
 param appServicePlanName string
 param vnetName string
 param frontendSubNetName string
-
+param keyVaultName string
+param storageAccountConnectionProperties object
+param acrConnectionProperties object
 
 resource vnet 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
   name: vnetName
@@ -29,10 +31,42 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
       linuxFxVersion: 'DOCKER'
       alwaysOn: true
       appSettings: [
-        // {
-        //   name: 'WEBSITE_NODE_DEFAULT_VERSION'
-        //   value: '14.17.0'
-        // }
+        {
+          name: 'BLOB_ACCOUNT_NAME'
+          value: storageAccountConnectionProperties.storageAccountName
+        }
+        {
+          name: 'BLOB_CONTAINER_NAME'
+          value: storageAccountConnectionProperties.containerName
+        }
+        {
+          name: 'BLOB_ACCOUNT_KEY'
+          value: '@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=${storageAccountConnectionProperties.secretName})'
+        }
+        {
+          name: 'SCM_DO_BUILD_DURING_DEPLOYMENT'
+          value: 'false'
+        }
+        {
+          name: 'ENABLE_ORYX_BUILD'
+          value: 'false'
+        }
+        {
+          name: 'DOCKER_REGISTRY_SERVER_PASSWORD'
+          value: '@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=${acrConnectionProperties.secretPasswordName})'
+        }
+        {
+          name: 'DOCKER_REGISTRY_SERVER_URL'
+          value: acrConnectionProperties.serverUrl
+        }
+        {
+          name: 'DOCKER_REGISTRY_SERVER_USERNAME'
+          value: '@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=${acrConnectionProperties.secretUserName})'
+        }
+        {
+          name: 'WEBSITE_PORT'
+          value: '8080'
+        }
       ]
     }
   }
