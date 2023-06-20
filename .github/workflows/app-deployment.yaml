@@ -55,7 +55,7 @@ jobs:
         name: Deploy to WebApp/FunctionApp
         with:
           app-name: '${{ vars.APPLICATION_PREFIX }}-${{ vars.ENVIRONMENT_NAME}}-webapp'
-          images: hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.IMAGE_NAME }}:${{ github.sha }}
+          images: hlsapp${{ vars.ENVIRONMENT_NAME}}acr.azurecr.io/${{ vars.WEB_APP_IMAGE_NAME }}:${{ github.sha }}
       # - name: Deploy to WebApp/FunctionApp
       #   uses: azure/webapps-deploy@v2
       #   with:
