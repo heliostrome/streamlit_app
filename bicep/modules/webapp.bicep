@@ -25,11 +25,13 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2022-09-01' existing = {
 resource webApp 'Microsoft.Web/sites@2022-09-01' = {
   name: '${prefix}-${environment}-webapp'
   location: location
+  kind: 'app,linux'
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
       linuxFxVersion: 'DOCKER'
       alwaysOn: true
+      use32BitWorkerProcess: false
       appSettings: [
         {
           name: 'BLOB_ACCOUNT_KEY'
@@ -56,7 +58,7 @@ resource webApp 'Microsoft.Web/sites@2022-09-01' = {
           value: '@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=${acrConnectionProperties.secretUsernameName})'
         }
         {
-          name: 'WEBSITE_PORT'
+          name: 'WEBSITES_PORT'
           value: '8080'
         }
       ]
