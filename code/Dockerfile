@@ -12,4 +12,4 @@ RUN pip install -r requirements.txt
 COPY . /app
 
 # execute the streamlit command
-CMD ["streamlit", "run", "Home.py", "--server.port=8080", "--server.enableCORS=false"]
+CMD ["streamlit", "run", "Home.py"]
