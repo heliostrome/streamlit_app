@@ -6,7 +6,7 @@ Created on Wed Apr 26 13:08:22 2023
 """
 
 
-from .pyeto_funcs import *
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -17,53 +17,46 @@ import json
 from urllib.parse import quote
 from aquacrop import AquaCropModel, Soil, Crop, InitialWaterContent, IrrigationManagement #if running in Windows, check https://github.com/aquacropos/aquacrop/issues/84
 from aquacrop.utils import prepare_weather
-from datetime import datetime
+from datetime import datetime as dt
 import matplotlib.pyplot as plt
 import seaborn as sns
-import os
+from .pyeto_funcs import *
+from ..shared_functions.shared_funcs import *
 
-os.environ['DEVELOPMENT'] = 'DEVELOPMENT'
 
-def say_hi():
-    st.write('Hi')
 
-def get_lat_long():
-    try:
-        lon = st.session_state.field_loc['centroid'][0]
-        lat = st.session_state.field_loc['centroid'][1]
-        return lat, lon
-    except:
-        st.write('The site location has not yet been chosen.')
-    
-    
+#environment = "development"
+environment = "normal"
 
-def get_alt():
-    
-    alt = st.session_state.altitude["altitude"]
-    
-    return alt
+
 
 def get_soil_class():
-    try:
-        soil_class = st.session_state["soil_class"]
-        return soil_class["soil class"]
-    except:
-        st.write('The soil parameters have not been retrieved.')
+    if environment == "development":
+        return "ClayLoam"
+    else:
+        try:
+            soil_class = st.session_state["soil_class"]
+            return soil_class["soil class"]
+        except:
+            st.write('The soil parameters have not been retrieved.')
 
 def get_crop_vals():
-    try:
-        crp = st.session_state["crop_type"]
+    if environment == "development":
+        return "Tomato", dt.strptime('25/05/2022','%d/%m/%Y')
+    else:
         try:
-            s_dt = st.session_state["sowing_date"]
-            return crp["crop"][0]["Name"], s_dt["sowing date"]
+            crp = st.session_state["crop_type"]
+            try:
+                s_dt = st.session_state["sowing_date"]
+                return crp["crop"][0]["Name"], s_dt["sowing date"]
+            except Exception as e:
+                st.write(e)
+                st.write("The sowing date has not been selected.")
         except Exception as e:
             st.write(e)
-            st.write("The sowing date has not been selected.")
-    except Exception as e:
-        st.write(e)
-        st.write("The crop type has not been selected.")
+            st.write("The crop type has not been selected.")
         
-def plot_results(df, crop_type):
+def plot_harvest_results(df, crop_type):
     fig,ax = plt.subplots()
     sns.barplot(data = df, x = df["Harvest Date (YYYY/MM/DD)"].dt.year,
             y = "Yield (tonne/ha)", hue = "crop Type", ax = ax)
@@ -207,24 +200,23 @@ def prepare_climate_file ():
 
 def aquacrop_rainfed():
     
-    st.header("Rainfed Agriculture Estimates")
     
-    weather_data, start_datetime, end_datetime = prepare_climate_file()
+    if environment == "development":
+        ####This section is used for rapid testing without running the queries
+        #weather file prepare via pyeto
+        filepath = "F:/OneDrive/Personal/Heliostrome/UI/Frontend/pages/Results_files/irrigation_files/Aquacrop_df.csv"
+        
+        weather_data = pd.read_csv(filepath, sep = ',')
+        weather_data["Date"] = pd.to_datetime(weather_data["Date"].copy())
+        
+        #st.write(weather_data)
+        #st.write(weather_data.dtypes)
+        
+        start_datetime = dt.strptime('01/01/2005 00:00:00','%d/%m/%Y %H:%M:%S')
+        end_datetime = dt.strptime('31/12/2016 23:00:00','%d/%m/%Y %H:%M:%S')
+    else:
+        weather_data, start_datetime, end_datetime = prepare_climate_file()
     
-    '''
-    ####This section is used for rapid testing without running the queries
-    filepath = "F:/OneDrive/Personal/Heliostrome/UI/Frontend/pages/Results_files/irrigation_files/Aquacrop_df.csv"
-    
-    weather_data = pd.read_csv(filepath, sep = ',')
-    weather_data["Date"] = pd.to_datetime(weather_data["Date"].copy())
-    
-    #st.write(weather_data)
-    #st.write(weather_data.dtypes)
-    
-    start_datetime = datetime.strptime('01/01/2005 00:00:00','%d/%m/%Y %H:%M:%S')
-    end_datetime = datetime.strptime('31/12/2016 23:03:00','%d/%m/%Y %H:%M:%S')
-    ####
-    '''
     #st.write(weather_data)
     #st.write(weather_data.dtypes)
     
@@ -236,6 +228,7 @@ def aquacrop_rainfed():
     
     #Set the crop parameters
     crop_type, sowing_dt = get_crop_vals()
+    
     
     #Setting the crop and crop type
     crop = Crop(crop_type, planting_date = sowing_dt.strftime("%m/%d")) #Planting Date (mm/dd) as per aquacrop https://github.com/aquacropos/aquacrop/blob/master/aquacrop/entities/crop.py
@@ -260,7 +253,69 @@ def aquacrop_rainfed():
     
     #Show final statistics
     #st.write(model._outputs.final_stats)
-    harv_date = datetime.strftime(model._outputs.final_stats["Harvest Date (YYYY/MM/DD)"].iloc[0].date(),'%d %B')
+    harv_date = dt.strftime(model._outputs.final_stats["Harvest Date (YYYY/MM/DD)"].iloc[0].date(),'%d %B')
+    
+    yearly_crop_cycles = len(model._outputs.final_stats["Season"]) / model._outputs.final_stats["Harvest Date (YYYY/MM/DD)"].dt.year.nunique()
+    
+    return model._outputs.final_stats, crop_type, harv_date, yearly_crop_cycles
+
+
+def aquacrop_irr():
+    
+    
+    if environment == "development":
+        ####This section is used for rapid testing without running the queries
+        #weather file prepare via pyeto
+        filepath = "F:/OneDrive/Personal/Heliostrome/UI/Frontend/pages/Results_files/irrigation_files/Aquacrop_df.csv"
+        
+        weather_data = pd.read_csv(filepath, sep = ',')
+        weather_data["Date"] = pd.to_datetime(weather_data["Date"].copy())
+        
+        #st.write(weather_data)
+        #st.write(weather_data.dtypes)
+        
+        start_datetime = dt.strptime('01/01/2005 00:00:00','%d/%m/%Y %H:%M:%S')
+        end_datetime = dt.strptime('31/12/2016 23:00:00','%d/%m/%Y %H:%M:%S')
+    else:
+        weather_data, start_datetime, end_datetime = prepare_climate_file()
+    
+    #st.write(weather_data)
+    #st.write(weather_data.dtypes)
+    
+    
+    #Set the soil parameters
+    soil_type = get_soil_class()
+    #st.write(soil_type)
+    soil = Soil(soil_type = soil_type)
+    
+    #Set the crop parameters
+    crop_type, sowing_dt = get_crop_vals()
+    
+    
+    #Setting the crop and crop type
+    crop = Crop(crop_type, planting_date = sowing_dt.strftime("%m/%d")) #Planting Date (mm/dd) as per aquacrop https://github.com/aquacropos/aquacrop/blob/master/aquacrop/entities/crop.py
+    
+    #Initial soil moisture conditions
+    InitWC = InitialWaterContent(value=['FC'])  #Note: Need to investigate houw realistic beginning with Field Capacity (FC) is
+    
+    #Defining the irrigation management strategy
+    irr_mngt = IrrigationManagement(irrigation_method = 0)  #method = 0 is rainfed agriculture/ no irrrigation
+    
+    # combine into aquacrop model and specify start and end simulation date
+    model = AquaCropModel(sim_start_time = f'{start_datetime.year}/01/01',
+                      sim_end_time = f'{end_datetime.year}/12/31',
+                      weather_df=weather_data,
+                      soil = soil,
+                      crop = crop,
+                      initial_water_content=InitWC,
+                     irrigation_management=irr_mngt)
+    
+    # run model till termination
+    model.run_model(till_termination=True)
+    
+    #Show final statistics
+    #st.write(model._outputs.final_stats)
+    harv_date = dt.strftime(model._outputs.final_stats["Harvest Date (YYYY/MM/DD)"].iloc[0].date(),'%d %B')
     
     yearly_crop_cycles = len(model._outputs.final_stats["Season"]) / model._outputs.final_stats["Harvest Date (YYYY/MM/DD)"].dt.year.nunique()
     

@@ -63,6 +63,7 @@ def tank_specification():
         
         
         if tank_included:
+            st.session_state["tank_present"] = True
             st.write("**Tank parameters**")
             
             
@@ -149,6 +150,9 @@ def tank_specification():
                     
                     #st.write(e)
                     st.write("Use the marker tool to select the location of the tank.")
+                    
+        else:
+            st.session_state["tank_present"] = False
             
             
 

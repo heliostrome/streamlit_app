@@ -23,7 +23,7 @@ with st.sidebar.container():
 
 selected = option_menu(
     menu_title = None, #required
-    options = ["Rainfed results", "Tank use", "Solar-pump sizing"],  #required
+    options = ["Solar-pump sizing", "Tank use", "Rainfed results"],  #required
     default_index = 0,  #optional
     orientation = "horizontal",
     styles={
@@ -33,13 +33,12 @@ selected = option_menu(
         "nav-link-selected": {"background-color": "#206239"},
     })
 
-
-if selected == "Rainfed results":
+if selected == "Solar-pump sizing":
     
-    from pages.Results_files.irrigation import *
-    #prepare_climate_file()
-    irrigation_results()
-    
+    from pages.Results_files.pv_pump_sizing import *
+    #hello_world()
+    plot_iv_curve()
+      
     
 if selected == "Tank use":
     
@@ -47,7 +46,10 @@ if selected == "Tank use":
     hello_world()
     #select_tank_loc()
     
-if selected == "Solar-pump sizing":
+if selected == "Rainfed results":
     
-    from pages.Results_files.solar_pump_sizing import *
-    hello_world()
+    from pages.Results_files.irrigation import *
+    #prepare_climate_file()
+    irrigation_results()
+    
+

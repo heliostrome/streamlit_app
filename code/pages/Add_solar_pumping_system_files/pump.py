@@ -5,22 +5,24 @@ Created on Fri Apr 14 13:43:58 2023
 @author: rghot
 """
 
-import streamlit as st
-from PIL import Image  
+import streamlit as st 
 import pandas as pd
 import leafmap.foliumap as leafmap
 import geopandas as gpd
 from streamlit_folium import st_folium  #https://github.com/randyzwitch/streamlit-folium/blob/master/examples/park_app.py
 from shapely import geometry
 import numpy as np
-from pathlib import Path
 
-#import folium
-from streamlit_folium import st_folium 
+
+from .pump_files.pumps.pump_dataset import *
+from .pump_files.pump_funcs import *
+
+
 
 def select_pump():
     if "pump_specs" not in st.session_state:
-        st.session_state.pump_specs = {'Pump type': np.nan, 'Pump model': np.nan, 'Suction head': 0.0, 'Pipe line diameter': 0}
+        st.session_state["pump_type"] = {'Pump type': np.nan, 'Pump model': np.nan}
+        st.session_state["pump_specs"] = {'Suction head': 0.0, 'Pipe line diameter': 0.0, "Pump head": 0.0}
     st.write("**Select the type of pump**")
     ptype = st.selectbox(
         label = '',
@@ -34,10 +36,25 @@ def select_pump():
     if ptype == "Surface pump":
         
         st.write("**Select the type of surface pump**")
-        surf_ptype = st.selectbox(
-            label = '',
-            options = ('Future Pump SF2', 'SunCulture Climate Smart Direct'),
-            label_visibility = "visible" )
+        
+        pump_model = pump_selection()
+        
+        
+    
+        run_pump = st.button('Confirm pump selection')
+    
+        st.markdown("""---""")
+    
+        if run_pump:
+            st.session_state.pump_type = {'Pump type': ptype, 'Pump model': pump_model}
+            
+        
+        
+        #####Just to show a dropdown menu
+        #surf_ptype = st.selectbox(
+        #    label = '',
+        #    options = ('Future Pump SF2', 'SunCulture Climate Smart Direct'),
+        #    label_visibility = "visible" )
     elif ptype == "Submersible pump":
         
         st.write("**Select the type of submersible pump**")
@@ -46,22 +63,34 @@ def select_pump():
             options = ('Tata 10 HP DC Submersible Pump (Water filled)', 'Tata 10 HP AC Submersible Pump (Water filled)', 'Shakti 10 HP DC Submersible Pump (Water filled)', 'Shakti 10 HP AC Submersible Pump (Water filled)',
                        'Tata 10 HP DC Submersible Pump (Oil filled)', 'Tata 10 HP AC Submersible Pump (Oil filled)', 'Shakti 10 HP DC Submersible Pump (Oil filled)', 'Shakti 10 HP AC Submersible Pump (Oil filled)'),
             label_visibility = "visible" )
-        
-    col1, col2, col3 = st.columns([1,1,3])
     
-    h_suction = col1.number_input(label = 'Suction head (m)', min_value = 0, step = 1)
-    dia_pipeline = col2.number_input(label = 'Pipe line diameter (mm)', min_value = 0, step = 1)
+    col1, col2, col3, col4 = st.columns([1,1,1,3])
     
-    with col3:
-        path_pump_suction_image = Path(__file__).parent / "../Add_solar_pumping_system_files/pump_files/pics/Pump_suction_head.png"
-        pump_suction_image = Image.open(path_pump_suction_image)
-        st.image(pump_suction_image, caption = 'Pump suction', use_column_width = True)
+    with col1:
+        h_suction = get_suction_head()
+            
+    with col2:
+        dia_pipeline = get_dia_pipeline()
         
-        conf_pspecs = st.button('Confirm specifications')
+    
+    
+    if st.session_state["tank_present"] == True:
+        pump_head = np.nan
+        with col4:
+            pump_suction_tank_image()
+    elif st.session_state["tank_present"]  == False:
+        with col3:
+            pump_head = get_pump_head()
+        with col4:
+            pump_suction_no_tank_image()
+        
+        
+    conf_pspecs = st.button('Confirm specifications')
      
     if conf_pspecs:
-        st.session_state.tank_specs = results_tank
-        st.dataframe(st.session_state.tank_specs)
+        st.write(h_suction)
+        st.session_state["pump_specs"] = {'Suction head': h_suction, 'Pipe line diameter': dia_pipeline, "Pump head": pump_head}
+        
               
     st.markdown("""---""")
 

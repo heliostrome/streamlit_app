@@ -232,6 +232,10 @@ def draw_local_irradiance():
     #resets the index to a specific year
     df.index = date_range(start=start_date_str, end=end_date_str, freq = 'H')
     
+    
+    if "tmy" not in st.session_state:
+        st.session_state["tmy"] = {"tmy": df}
+        
     #groups by month
     dfm = df["ghi"].groupby(lambda x: x.month).sum()/1000  #Wh to kWh
     

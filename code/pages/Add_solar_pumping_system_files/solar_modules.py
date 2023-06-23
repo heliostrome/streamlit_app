@@ -13,12 +13,8 @@ from .solar_module_files.solar_funcs import *
 import numpy as np
 from st_keyup import st_keyup
 
-#from st_aggrid import JsCode, AgGrid, GridOptionsBuilder #https://blog.streamlit.io/building-a-pivottable-report-with-streamlit-and-ag-grid/
-#from st_aggrid.shared import GridUpdateMode
 from pathlib import Path
-#def format_func(option):
-#    modules = get_module_params()
-#    return modules[option]
+
 
 
 
@@ -45,15 +41,11 @@ def select_module():
     st.header("Solar module type")
     
     
-    if "pv_arr_specs" not in st.session_state:
-        st.session_state["sol_arr_specs"] = {"Solar module type": np.nan}
+    #if "pv_arr_specs" not in st.session_state:
+    #    st.session_state["pv_arr_specs"] = {"Solar module type": np.nan}
     
-           
-        pv_module_type = select_solar_module()
-    
-    
-    
-    
+    pv_module_type = select_solar_module()
+
     run_module_type = st.button('Confirm module selection')
     if run_module_type:
         st.session_state.pv_arr_specs = pv_module_type
